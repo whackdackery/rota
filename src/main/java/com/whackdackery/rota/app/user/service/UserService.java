@@ -9,22 +9,31 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 @AllArgsConstructor
 public class UserService {
 
     UserRepository userRepository;
     ModelMapper modelMapper;
-    
+
     public Page<UserGetDto> getAll(Pageable pageable) {
         Page<User> users = userRepository.findAll(pageable);
-        if (!users.isEmpty()){
+        if (!users.isEmpty()) {
             return users.map(this::convertToDto);
         }
         return Page.empty();
     }
 
+    public Optional<UserGetDto> get(Long userId) {
+        Optional<User> user = userRepository.findById(userId);
+        return user.map(this::convertToDto);
+    }
+
     private UserGetDto convertToDto(User user) {
         return modelMapper.map(user, UserGetDto.class);
     }
+
+
 }
