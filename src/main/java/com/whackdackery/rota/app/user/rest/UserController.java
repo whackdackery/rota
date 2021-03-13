@@ -1,6 +1,5 @@
 package com.whackdackery.rota.app.user.rest;
 
-import com.whackdackery.rota.app.user.model.User;
 import com.whackdackery.rota.app.user.model.dto.UserGetDto;
 import com.whackdackery.rota.app.user.service.UserService;
 import lombok.AllArgsConstructor;
