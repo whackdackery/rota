@@ -23,6 +23,15 @@ public class UserController {
 
     UserService userService;
 
+    @GetMapping(path = "/{userId}")
+    public UserGetDto getUser(@PathVariable Long userId) {
+        Optional<UserGetDto> user = userService.get(userId);
+        if (user.isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Not found");
+        }
+        return user.get();
+    }
+
     @GetMapping
     public Page<UserGetDto> getUsers(Pageable pageable) {
         Page<UserGetDto> users = userService.getAll(pageable);
@@ -32,12 +41,4 @@ public class UserController {
         return users;
     }
 
-    @GetMapping(path = "/{userId}")
-    public UserGetDto getUser(@PathVariable Long userId) {
-        Optional<UserGetDto> user = userService.get(userId);
-        if (user.isEmpty()) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Not found");
-        }
-        return user.get();
-    }
 }
