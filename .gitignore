@@ -31,3 +31,6 @@ build/
 
 ### VS Code ###
 .vscode/
+
+src/main/resources/database-credentials.properties
+src/main/resources/flyway-credentials.properties
