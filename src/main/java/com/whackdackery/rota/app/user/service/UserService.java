@@ -18,17 +18,17 @@ public class UserService {
     UserRepository userRepository;
     ModelMapper modelMapper;
 
+    public Optional<UserGetDto> get(Long userId) {
+        Optional<User> user = userRepository.findById(userId);
+        return user.map(this::convertToDto);
+    }
+
     public Page<UserGetDto> getAll(Pageable pageable) {
         Page<User> users = userRepository.findAll(pageable);
         if (!users.isEmpty()) {
             return users.map(this::convertToDto);
         }
         return Page.empty();
-    }
-
-    public Optional<UserGetDto> get(Long userId) {
-        Optional<User> user = userRepository.findById(userId);
-        return user.map(this::convertToDto);
     }
 
     private UserGetDto convertToDto(User user) {
