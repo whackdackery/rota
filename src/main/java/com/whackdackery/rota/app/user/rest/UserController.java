@@ -27,9 +27,7 @@ public class UserController {
     public Page<UserGetDto> getUsers(Pageable pageable) {
         Page<UserGetDto> users = userService.getAll(pageable);
         if (users.isEmpty()) {
-            throw new ResponseStatusException(
-                    HttpStatus.NOT_FOUND, "Not found"
-            );
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Not found");
         }
         return users;
     }
@@ -38,11 +36,8 @@ public class UserController {
     public UserGetDto getUser(@PathVariable Long userId) {
         Optional<UserGetDto> user = userService.get(userId);
         if (user.isEmpty()) {
-            throw new ResponseStatusException(
-                    HttpStatus.NOT_FOUND, "Not found"
-            );
-        } else {
-            return user.get();
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Not found");
         }
+        return user.get();
     }
 }
