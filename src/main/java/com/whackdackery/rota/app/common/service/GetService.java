@@ -14,9 +14,9 @@ public abstract class GetService<E extends BaseEntity, D extends GetDto> {
     private final ModelMapper modelMapper;
     private final Class<D> dtoClass;
 
-    public GetService(PagingAndSortingRepository<E, Long> repo,
-                      ModelMapper modelMapper,
-                      Class<D> dtoClass) {
+    protected GetService(PagingAndSortingRepository<E, Long> repo,
+                         ModelMapper modelMapper,
+                         Class<D> dtoClass) {
         this.repo = repo;
         this.modelMapper = modelMapper;
         this.dtoClass = dtoClass;
