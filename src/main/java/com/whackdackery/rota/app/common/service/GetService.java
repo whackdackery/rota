@@ -9,7 +9,7 @@ import org.springframework.data.repository.PagingAndSortingRepository;
 
 import java.util.Optional;
 
-public class GetService<E extends BaseEntity, D extends GetDto> {
+public abstract class GetService<E extends BaseEntity, D extends GetDto> {
     private final PagingAndSortingRepository<E, Long> repo;
     private final ModelMapper modelMapper;
     private final Class<D> dtoClass;
