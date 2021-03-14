@@ -25,10 +25,7 @@ public class UserService {
 
     public Page<UserGetDto> getAll(Pageable pageable) {
         Page<User> users = userRepository.findAll(pageable);
-        if (!users.isEmpty()) {
-            return users.map(this::convertToDto);
-        }
-        return Page.empty();
+        return users.map(this::convertToDto);
     }
 
     private UserGetDto convertToDto(User user) {
