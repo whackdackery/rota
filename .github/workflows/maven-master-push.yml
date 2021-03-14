@@ -1,9 +1,7 @@
-name: Build and test
+name: Build and test and coverage
 
 on:
   push:
-    branches: [ master ]
-  pull_request:
     branches: [ master ]
 
 jobs:
