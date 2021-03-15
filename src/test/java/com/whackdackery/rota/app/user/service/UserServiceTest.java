@@ -26,8 +26,10 @@ class UserServiceTest {
 
     private static final String TEST_USERNAME_ONE = "Test";
     private static final String TEST_EMAIL_ONE = "test@admin.com";
+    private static final String TEST_PASSWORD_ONE = "password1";
     private static final String TEST_USERNAME_TWO = "Test2";
     private static final String TEST_EMAIL_TWO = "test2@admin.com";
+    private static final String TEST_PASSWORD_TWO = "password2";
     private static final Instant CREATED_ON = Instant.parse("2020-01-01T09:00:00.00Z");
     private static final Instant UPDATED_ON = Instant.parse("2020-01-01T09:00:00.00Z");
 
@@ -58,9 +60,14 @@ class UserServiceTest {
         when(userRepositoryMock.findAll(Pageable.unpaged())).thenReturn(getPageContainingSingleUser());
 
         Page<UserGetDto> users = userService.getAll(Pageable.unpaged());
+        UserGetDto user = users.get().findFirst().get();
         assertThat(users.getTotalElements()).isEqualTo(1L);
         assertThat(users).isInstanceOf(Page.class);
-        assertThat(users.get().findFirst().get().getUsername()).isEqualTo(TEST_USERNAME_ONE);
+        assertThat(user.getUsername()).isEqualTo(TEST_USERNAME_ONE);
+        assertThat(user.getEmail()).isEqualTo(TEST_EMAIL_ONE);
+        assertThat(user.getId()).isEqualTo(1L);
+        assertThat(user.getCreated()).isEqualTo(CREATED_ON);
+        assertThat(user.getUpdated()).isEqualTo(UPDATED_ON);
     }
 
     @Test
@@ -85,8 +92,10 @@ class UserServiceTest {
 
     private User getTestUserOne() {
         User user = new User();
+        user.setId(1L);
         user.setUsername(TEST_USERNAME_ONE);
         user.setEmail(TEST_EMAIL_ONE);
+        user.setPassword(TEST_PASSWORD_ONE);
         user.setCreated(CREATED_ON);
         user.setUpdated(UPDATED_ON);
         return user;
@@ -94,8 +103,10 @@ class UserServiceTest {
 
     private User getTestUserTwo() {
         User user = new User();
+        user.setId(2L);
         user.setUsername(TEST_USERNAME_TWO);
         user.setEmail(TEST_EMAIL_TWO);
+        user.setPassword(TEST_PASSWORD_TWO);
         user.setCreated(CREATED_ON);
         user.setUpdated(UPDATED_ON);
         return user;
