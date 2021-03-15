@@ -1,5 +1,4 @@
-name: Build and test and coverage
-
+name: Main
 on:
   push:
     branches: [ master ]
