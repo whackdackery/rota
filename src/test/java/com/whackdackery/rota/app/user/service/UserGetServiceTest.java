@@ -22,7 +22,7 @@ import static org.mockito.Mockito.when;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
-class UserServiceTest {
+class UserGetServiceTest {
 
     private static final String TEST_USERNAME_ONE = "Test";
     private static final String TEST_EMAIL_ONE = "test@admin.com";
@@ -34,7 +34,7 @@ class UserServiceTest {
     private static final Instant UPDATED_ON = Instant.parse("2020-01-01T09:00:00.00Z");
 
     @Autowired
-    UserService userService;
+    UserGetService userGetService;
     @MockBean
     private UserRepository userRepositoryMock;
 
@@ -42,7 +42,7 @@ class UserServiceTest {
     void getReturnsDtoWhenIdIsValid() {
         when(userRepositoryMock.findById(1L)).thenReturn(Optional.of(getTestUserOne()));
 
-        Optional<UserGetDto> user = userService.get(1L);
+        Optional<UserGetDto> user = userGetService.get(1L);
         assertThat(user).isPresent();
         assertThat(user.get()).isInstanceOf(UserGetDto.class);
     }
@@ -51,7 +51,7 @@ class UserServiceTest {
     void getReturnsDtoWhenIdIsInvalid() {
         when(userRepositoryMock.findById(2L)).thenReturn(Optional.empty());
 
-        Optional<UserGetDto> user = userService.get(2L);
+        Optional<UserGetDto> user = userGetService.get(2L);
         assertThat(user).isNotPresent();
     }
 
@@ -59,7 +59,7 @@ class UserServiceTest {
     void getAllReturnsPageWithSingleDto() {
         when(userRepositoryMock.findAll(Pageable.unpaged())).thenReturn(getPageContainingSingleUser());
 
-        Page<UserGetDto> users = userService.getAll(Pageable.unpaged());
+        Page<UserGetDto> users = userGetService.getAll(Pageable.unpaged());
         UserGetDto user = users.get().findFirst().get();
         assertThat(users.getTotalElements()).isEqualTo(1L);
         assertThat(users).isInstanceOf(Page.class);
@@ -74,7 +74,7 @@ class UserServiceTest {
     void getAllReturnsPageWithMultipleDtos() {
         when(userRepositoryMock.findAll(Pageable.unpaged())).thenReturn(getPageContainingMultipleUsers());
 
-        Page<UserGetDto> users = userService.getAll(Pageable.unpaged());
+        Page<UserGetDto> users = userGetService.getAll(Pageable.unpaged());
         assertThat(users.getTotalElements()).isEqualTo(2L);
         assertThat(users).isInstanceOf(Page.class);
         assertThat(users.get().findFirst().get().getUsername()).isEqualTo(TEST_USERNAME_ONE);
@@ -85,7 +85,7 @@ class UserServiceTest {
     void getAllReturnsEmptyPageWhenNoResultsFound() {
         when(userRepositoryMock.findAll(Pageable.unpaged())).thenReturn(Page.empty());
 
-        Page<UserGetDto> users = userService.getAll(Pageable.unpaged());
+        Page<UserGetDto> users = userGetService.getAll(Pageable.unpaged());
         assertThat(users.getTotalElements()).isZero();
         assertThat(users).isInstanceOf(Page.class);
     }
