@@ -8,23 +8,27 @@ import org.springframework.data.domain.Pageable;
 
 import java.util.Optional;
 
-public abstract class ServiceOrchestrator<E extends BaseEntity, GD extends GetDto, PD extends PostDto, GS extends GetService<E, GD>> {
+public abstract class ServiceOrchestrator<E extends BaseEntity, G extends GetDto, P extends PostDto> {
 
-    GS getService;
+    GetService<E, G> getService;
 
-    public Optional<GD> getOne(Long id) {
+    protected ServiceOrchestrator(GetService<E, G> getService) {
+        this.getService = getService;
+    }
+
+    public Optional<G> getOne(Long id) {
         return getService.get(id);
     }
 
-    public Page<GD> getAll(Pageable pageable) {
+    public Page<G> getAll(Pageable pageable) {
         return getService.getAll(pageable);
     }
 
-    public GD createOne(PD entity) {
+    public G createOne(P entity) {
         return null;
     }
 
-    public GD updateOne(PD entity) {
+    public G updateOne(P entity) {
         return null;
     }
 
