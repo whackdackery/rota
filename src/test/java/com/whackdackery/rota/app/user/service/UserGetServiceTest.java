@@ -14,7 +14,7 @@ import org.springframework.data.domain.Pageable;
 
 import java.util.Optional;
 
-import static com.whackdackery.rota.app.user.service.UserTestSetup.getTestUserOne;
+import static com.whackdackery.rota.app.user.service.UserTestSetup.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
@@ -31,46 +31,39 @@ class UserGetServiceTest {
 
     @Test
     void getReturnsDtoWhenIdIsValid() {
-        when(userRepositoryMock.findById(UserTestSetup.TEST_ID_ONE)).thenReturn(Optional.of(getTestUserOne()));
+        when(userRepositoryMock.findById(TEST_ID_ONE)).thenReturn(Optional.of(getTestUserOne()));
 
-        Optional<UserGetDto> user = userGetService.get(UserTestSetup.TEST_ID_ONE);
+        Optional<UserGetDto> user = userGetService.get(TEST_ID_ONE);
         assertThat(user).isPresent();
         assertThat(user.get()).isInstanceOf(UserGetDto.class);
     }
 
     @Test
     void getReturnsDtoWhenIdIsInvalid() {
-        when(userRepositoryMock.findById(2L)).thenReturn(Optional.empty());
+        when(userRepositoryMock.findById(TEST_ID_TWO)).thenReturn(Optional.empty());
 
-        Optional<UserGetDto> user = userGetService.get(2L);
+        Optional<UserGetDto> user = userGetService.get(TEST_ID_TWO);
         assertThat(user).isNotPresent();
     }
 
     @Test
     void getAllReturnsPageWithSingleDto() {
-        when(userRepositoryMock.findAll(Pageable.unpaged())).thenReturn(UserTestSetup.getPageContainingSingleUser());
+        when(userRepositoryMock.findAll(Pageable.unpaged())).thenReturn(getPageContainingSingleUser());
 
         Page<UserGetDto> users = userGetService.getAll(Pageable.unpaged());
         UserGetDto user = users.get().findFirst().get();
         assertThat(users.getTotalElements()).isEqualTo(1L);
         assertThat(users).isInstanceOf(Page.class);
-        assertThat(user.getUsername()).isEqualTo(UserTestSetup.TEST_USERNAME_ONE);
-        assertThat(user.getEmail()).isEqualTo(UserTestSetup.TEST_EMAIL_ONE);
-        assertThat(user.getId()).isEqualTo(1L);
-        assertThat(user.getCreated()).isEqualTo(UserTestSetup.CREATED_ON);
-        assertThat(user.getUpdated()).isEqualTo(UserTestSetup.UPDATED_ON);
+        assertThat(user).isEqualTo(getTestUserOneDto());
     }
 
     @Test
     void getAllReturnsPageWithMultipleDtos() {
-        when(userRepositoryMock.findAll(any(Pageable.class))).thenReturn(UserTestSetup.getPageContainingMultipleUsers());
+        when(userRepositoryMock.findAll(any(Pageable.class))).thenReturn(getPageContainingMultipleUsers());
 
         Page<UserGetDto> users = userGetService.getAll(Pageable.unpaged());
         assertThat(users.getTotalElements()).isEqualTo(2L);
-        assertThat(users).isInstanceOf(Page.class);
-        UserGetDto user = users.get().findFirst().get();
-        assertThat(user.getUsername()).isEqualTo(UserTestSetup.TEST_USERNAME_ONE);
-        assertThat(users.toList().get(1).getUsername()).isEqualTo(UserTestSetup.TEST_USERNAME_TWO);
+        assertThat(users).isInstanceOf(Page.class).isEqualTo(getPageContainingMultipleUserDtos());
     }
 
     @Test
