@@ -8,9 +8,9 @@ import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 @Service
-public class UserService extends GetService<User, UserGetDto> {
+public class UserGetService extends GetService<User, UserGetDto> {
 
-    public UserService(UserRepository repo, ModelMapper modelMapper) {
+    public UserGetService(UserRepository repo, ModelMapper modelMapper) {
         super(repo, modelMapper, UserGetDto.class);
     }
 }

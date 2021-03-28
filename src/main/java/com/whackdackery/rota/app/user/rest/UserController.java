@@ -1,7 +1,7 @@
 package com.whackdackery.rota.app.user.rest;
 
 import com.whackdackery.rota.app.user.model.dto.UserGetDto;
-import com.whackdackery.rota.app.user.service.UserService;
+import com.whackdackery.rota.app.user.service.UserServiceOrchestrator;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -21,11 +21,11 @@ import java.util.Optional;
 @AllArgsConstructor
 public class UserController {
 
-    UserService userService;
+    UserServiceOrchestrator orchestrator;
 
     @GetMapping(path = "/{userId}")
     public UserGetDto getUser(@PathVariable Long userId) {
-        Optional<UserGetDto> user = userService.get(userId);
+        Optional<UserGetDto> user = orchestrator.getOne(userId);
         if (user.isEmpty()) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Not found");
         }
@@ -34,7 +34,7 @@ public class UserController {
 
     @GetMapping
     public Page<UserGetDto> getUsers(Pageable pageable) {
-        Page<UserGetDto> users = userService.getAll(pageable);
+        Page<UserGetDto> users = orchestrator.getAll(pageable);
         if (users.isEmpty()) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Not found");
         }
