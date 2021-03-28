@@ -33,15 +33,15 @@ class UserServiceOrchestratorTest {
 
     @Test
     void returnsResultIfUserFound() {
-        when(getService.get(UserTestSetup.TEST_ID_ONE)).thenReturn(Optional.of(UserTestSetup.getTestUserOneDto()));
+        when(getService.get(UserTestSetups.TEST_ID_ONE)).thenReturn(Optional.of(UserTestSetups.getTestUserOneGetDto()));
 
-        Optional<UserGetDto> user = orchestrator.getOne(UserTestSetup.TEST_ID_ONE);
+        Optional<UserGetDto> user = orchestrator.getOne(UserTestSetups.TEST_ID_ONE);
         assertThat(user).isPresent();
     }
 
     @Test
     void returnsMultipleResultsIfMultipleUsersFound() {
-        when(getService.getAll(any(Pageable.class))).thenReturn(UserTestSetup.getPageContainingMultipleUserDtos());
+        when(getService.getAll(any(Pageable.class))).thenReturn(UserTestSetups.getPageContainingMultipleUserDtos());
 
         Page<UserGetDto> userPage = orchestrator.getAll(Pageable.unpaged());
         assertThat(userPage.getTotalElements()).isEqualTo(2L);

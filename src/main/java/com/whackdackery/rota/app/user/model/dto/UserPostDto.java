@@ -1,13 +1,25 @@
 package com.whackdackery.rota.app.user.model.dto;
 
 import com.whackdackery.rota.app.common.model.PostDto;
-import lombok.Data;
+import lombok.Builder;
 import lombok.EqualsAndHashCode;
+import lombok.Value;
+
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Pattern;
 
 @EqualsAndHashCode(callSuper = true)
-@Data
+@Value
+@Builder
 public class UserPostDto extends PostDto {
+
+    @NotBlank(message = "Username cannot be blank")
     String username;
+    @Email(message = "Must be a valid email")
+    @Pattern(regexp = ".+@.+\\..+", message = "Please provide a valid email address")
     String email;
+    @NotBlank(message = "Password should not be blank")
     String password;
+
 }
