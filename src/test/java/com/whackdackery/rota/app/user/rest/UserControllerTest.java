@@ -9,11 +9,12 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.Optional;
 
-import static com.whackdackery.rota.app.user.service.UserTestSetup.*;
+import static com.whackdackery.rota.app.user.service.UserTestSetups.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
@@ -29,10 +30,10 @@ class UserControllerTest {
 
     @Test
     void getUserReturnsSingleResult() {
-        when(orchestrator.getOne(TEST_ID_ONE)).thenReturn(Optional.of(getTestUserOneDto()));
+        when(orchestrator.getOne(TEST_ID_ONE)).thenReturn(Optional.of(getTestUserOneGetDto()));
 
-        UserGetDto user = controller.getUser(TEST_ID_ONE);
-        assertThat(user).isInstanceOf(UserGetDto.class).isEqualTo(getTestUserOneDto());
+        ResponseEntity<UserGetDto> user = controller.getUser(TEST_ID_ONE);
+        assertThat(user.getBody()).isEqualTo(getTestUserOneGetDto());
     }
 
     @Test
@@ -62,4 +63,5 @@ class UserControllerTest {
         }).isInstanceOf(ResponseStatusException.class)
                 .hasMessageContaining("Not found");
     }
+    // TODO more tests
 }

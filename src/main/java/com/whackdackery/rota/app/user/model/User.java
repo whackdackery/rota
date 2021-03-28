@@ -4,6 +4,7 @@ import com.whackdackery.rota.app.common.model.BaseEntity;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 
@@ -13,7 +14,9 @@ import javax.persistence.Table;
 @Data
 public class User extends BaseEntity {
 
+    @Column(unique = true)
     private String username;
+    @Column(unique = true)
     private String email;
     private String password;
 

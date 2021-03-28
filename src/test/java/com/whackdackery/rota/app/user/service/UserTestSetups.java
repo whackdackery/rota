@@ -2,6 +2,7 @@ package com.whackdackery.rota.app.user.service;
 
 import com.whackdackery.rota.app.user.model.User;
 import com.whackdackery.rota.app.user.model.dto.UserGetDto;
+import com.whackdackery.rota.app.user.model.dto.UserPostDto;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 
@@ -9,7 +10,7 @@ import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 
-public class UserTestSetup {
+public class UserTestSetups {
 
     public static final Long TEST_ID_ONE = 1L;
     public static final Long TEST_ID_TWO = 2L;
@@ -41,17 +42,17 @@ public class UserTestSetup {
         return user;
     }
 
-    public static UserGetDto getTestUserOneDto() {
+    public static UserGetDto getTestUserOneGetDto() {
         User user = getTestUserOne();
-        return generateDto(user);
+        return generateGetDto(user);
     }
 
-    public static UserGetDto getTestUserTwoDto() {
+    public static UserGetDto getTestUserTwoGetDto() {
         User user = getTestUserTwo();
-        return generateDto(user);
+        return generateGetDto(user);
     }
 
-    private static UserGetDto generateDto(User user) {
+    private static UserGetDto generateGetDto(User user) {
         UserGetDto userGetDto = new UserGetDto();
         userGetDto.setId(user.getId());
         userGetDto.setUsername(user.getUsername());
@@ -76,15 +77,29 @@ public class UserTestSetup {
 
     public static Page<UserGetDto> getPageContainingSingleUserDto() {
         List<UserGetDto> users = new ArrayList<>();
-        users.add(getTestUserOneDto());
+        users.add(getTestUserOneGetDto());
         return new PageImpl<>(users);
     }
 
     public static Page<UserGetDto> getPageContainingMultipleUserDtos() {
         List<UserGetDto> users = new ArrayList<>();
-        users.add(getTestUserOneDto());
-        users.add(getTestUserTwoDto());
+        users.add(getTestUserOneGetDto());
+        users.add(getTestUserTwoGetDto());
         return new PageImpl<>(users);
     }
+
+    public static UserPostDto getTestUserOnePostDto() {
+        User user = getTestUserOne();
+        return generatePostDto(user);
+    }
+
+    private static UserPostDto generatePostDto(User user) {
+        return UserPostDto.builder()
+                .username(user.getUsername())
+                .email(user.getEmail())
+                .password(user.getPassword())
+                .build();
+    }
+
 
 }
