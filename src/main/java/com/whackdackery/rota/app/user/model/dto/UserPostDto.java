@@ -5,7 +5,6 @@ import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Value;
 
-import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
 
@@ -16,7 +15,7 @@ public class UserPostDto extends PostDto {
 
     @NotBlank(message = "Username cannot be blank")
     String username;
-    @Email(message = "Must be a valid email")
+    @NotBlank(message = "Please provide a valid email address")
     @Pattern(regexp = ".+@.+\\..+", message = "Please provide a valid email address")
     String email;
     @NotBlank(message = "Password should not be blank")

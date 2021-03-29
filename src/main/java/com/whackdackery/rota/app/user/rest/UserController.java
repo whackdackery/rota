@@ -49,6 +49,9 @@ public class UserController {
     @PostMapping
     public ResponseEntity<UserGetDto> create(@Valid @RequestBody UserPostDto user) {
         Optional<UserGetDto> createdUser = orchestrator.createOne(user);
+        if (createdUser.isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "There was a problem saving this user");
+        }
         return new ResponseEntity<>(createdUser.get(), HttpStatus.CREATED);
     }
 
