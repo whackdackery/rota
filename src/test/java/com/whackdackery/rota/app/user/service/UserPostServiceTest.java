@@ -35,7 +35,7 @@ class UserPostServiceTest {
                 .thenReturn(getTestUserOne());
 
         Optional<UserGetDto> createdUser = service.add(getTestUserOnePostDto());
-        assertThat(createdUser.get()).isEqualTo(getTestUserOneGetDto());
+        assertThat(createdUser).contains(getTestUserOneGetDto());
     }
 
     @Test
