@@ -49,6 +49,9 @@ public class UserController {
     @PostMapping
     public ResponseEntity<UserGetDto> create(@Valid @RequestBody UserPostDto user) {
         Optional<UserGetDto> createdUser = orchestrator.createOne(user);
+        if (createdUser.isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "There was a problem saving this user");
+        }
         return new ResponseEntity<>(createdUser.get(), HttpStatus.CREATED);
     }
 
@@ -57,7 +60,7 @@ public class UserController {
     public Map<String, String> handleValidationExceptions(
             MethodArgumentNotValidException ex) {
         Map<String, String> errors = new HashMap<>();
-        ex.getBindingResult().getAllErrors().forEach((error) -> {
+        ex.getBindingResult().getAllErrors().forEach(error -> {
             String fieldName = ((FieldError) error).getField();
             String errorMessage = error.getDefaultMessage();
             errors.put(fieldName, errorMessage);

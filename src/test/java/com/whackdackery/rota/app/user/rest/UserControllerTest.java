@@ -63,5 +63,22 @@ class UserControllerTest {
         }).isInstanceOf(ResponseStatusException.class)
                 .hasMessageContaining("Not found");
     }
-    // TODO more tests
+
+    @Test
+    void postUserReturnsSuccessfulResult() {
+        when(orchestrator.createOne(getTestUserOnePostDto())).thenReturn(Optional.of(getTestUserOneGetDto()));
+
+        ResponseEntity<UserGetDto> userGetDtoResponseEntity = controller.create(getTestUserOnePostDto());
+        assertThat(userGetDtoResponseEntity.getBody()).isEqualTo(getTestUserOneGetDto());
+    }
+
+    @Test
+    void postUserHandlesUnsuccessfulRepoSave() {
+        when(orchestrator.createOne(getTestUserOnePostDto())).thenReturn(Optional.empty());
+
+        assertThatThrownBy(() -> {
+            controller.create(getTestUserOnePostDto());
+        }).isInstanceOf(ResponseStatusException.class)
+                .hasMessageContaining("There was a problem saving this user");
+    }
 }
