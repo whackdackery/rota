@@ -1,6 +1,6 @@
 package com.whackdackery.rota.app.user.service;
 
-import com.whackdackery.rota.app.common.service.PostService;
+import com.whackdackery.rota.app.common.service.DestructiveService;
 import com.whackdackery.rota.app.user.model.User;
 import com.whackdackery.rota.app.user.model.dto.UserGetDto;
 import com.whackdackery.rota.app.user.model.dto.UserPostDto;
@@ -9,8 +9,8 @@ import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 @Service
-public class UserPostService extends PostService<User, UserPostDto, UserGetDto> {
-    protected UserPostService(UserRepository repo, ModelMapper modelMapper) {
+public class UserDestructiveService extends DestructiveService<User, UserPostDto, UserGetDto> {
+    protected UserDestructiveService(UserRepository repo, ModelMapper modelMapper) {
         super(User.class, UserGetDto.class, repo, modelMapper);
     }
 }

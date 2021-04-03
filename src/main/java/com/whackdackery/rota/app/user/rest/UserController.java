@@ -5,6 +5,7 @@ import com.whackdackery.rota.app.user.model.dto.UserPostDto;
 import com.whackdackery.rota.app.user.service.UserServiceOrchestrator;
 import lombok.AllArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -55,6 +56,11 @@ public class UserController {
         return new ResponseEntity<>(createdUser.get(), HttpStatus.CREATED);
     }
 
+    @DeleteMapping("/{userId}")
+    public void delete(@PathVariable Long userId) {
+        orchestrator.deleteOne(userId);
+    }
+
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public Map<String, String> handleValidationExceptions(
@@ -73,6 +79,14 @@ public class UserController {
     public Map<String, String> handleSqlViolationExceptions() {
         Map<String, String> errors = new HashMap<>();
         errors.put("Error", "Username or email already exists");
+        return errors;
+    }
+
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(EmptyResultDataAccessException.class)
+    public Map<String, String> handleEmptyResultDataAccessExceptions() {
+        Map<String, String> errors = new HashMap<>();
+        errors.put("Error", "User does not exist");
         return errors;
     }
 }

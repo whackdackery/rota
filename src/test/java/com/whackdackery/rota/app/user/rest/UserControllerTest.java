@@ -7,6 +7,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
@@ -15,9 +16,9 @@ import org.springframework.web.server.ResponseStatusException;
 import java.util.Optional;
 
 import static com.whackdackery.rota.app.user.service.UserTestSetups.*;
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.assertj.core.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -40,9 +41,7 @@ class UserControllerTest {
     void getUserReturnsThrowsNotFoundException() {
         when(orchestrator.getOne(any())).thenReturn(Optional.empty());
 
-        assertThatThrownBy(() -> {
-            controller.getUser(TEST_ID_ONE);
-        }).isInstanceOf(ResponseStatusException.class)
+        assertThatThrownBy(() -> controller.getUser(TEST_ID_ONE)).isInstanceOf(ResponseStatusException.class)
                 .hasMessageContaining("Not found");
     }
 
@@ -58,9 +57,7 @@ class UserControllerTest {
     void getUsersReturnsNoResults() {
         when(orchestrator.getAll(any(Pageable.class))).thenReturn(Page.empty());
 
-        assertThatThrownBy(() -> {
-            controller.getUsers(Pageable.unpaged());
-        }).isInstanceOf(ResponseStatusException.class)
+        assertThatThrownBy(() -> controller.getUsers(Pageable.unpaged())).isInstanceOf(ResponseStatusException.class)
                 .hasMessageContaining("Not found");
     }
 
@@ -76,9 +73,18 @@ class UserControllerTest {
     void postUserHandlesUnsuccessfulRepoSave() {
         when(orchestrator.createOne(getTestUserOnePostDto())).thenReturn(Optional.empty());
 
-        assertThatThrownBy(() -> {
-            controller.create(getTestUserOnePostDto());
-        }).isInstanceOf(ResponseStatusException.class)
+        assertThatThrownBy(() -> controller.create(getTestUserOnePostDto())).isInstanceOf(ResponseStatusException.class)
                 .hasMessageContaining("There was a problem saving this user");
+    }
+
+    @Test
+    void deleteUserSuccessfully() {
+        assertThatCode(() -> controller.delete(1L)).doesNotThrowAnyException();
+    }
+
+    @Test
+    void deleteUserFails() {
+        doThrow(EmptyResultDataAccessException.class).when(orchestrator).deleteOne(1L);
+        assertThatThrownBy(() -> controller.delete(1L)).isInstanceOf(EmptyResultDataAccessException.class);
     }
 }

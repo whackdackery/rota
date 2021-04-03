@@ -9,14 +9,14 @@ import org.springframework.data.repository.PagingAndSortingRepository;
 import java.time.Instant;
 import java.util.Optional;
 
-public abstract class PostService<E extends BaseEntity, P extends PostDto, G extends GetDto> {
+public abstract class DestructiveService<E extends BaseEntity, P extends PostDto, G extends GetDto> {
     private final PagingAndSortingRepository<E, Long> repo;
     private final ModelMapper modelMapper;
     private final Class<E> entityClass;
     private final Class<G> getDtoClass;
 
 
-    protected PostService(Class<E> entityClass, Class<G> getDtoClass, PagingAndSortingRepository<E, Long> repo, ModelMapper modelMapper) {
+    protected DestructiveService(Class<E> entityClass, Class<G> getDtoClass, PagingAndSortingRepository<E, Long> repo, ModelMapper modelMapper) {
         this.repo = repo;
         this.modelMapper = modelMapper;
         this.entityClass = entityClass;
@@ -39,4 +39,7 @@ public abstract class PostService<E extends BaseEntity, P extends PostDto, G ext
         return modelMapper.map(entity, getDtoClass);
     }
 
+    public void delete(Long id) {
+        repo.deleteById(id);
+    }
 }

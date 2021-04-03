@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class UserServiceOrchestrator extends ServiceOrchestrator<User, UserGetDto, UserPostDto> {
 
-    public UserServiceOrchestrator(UserGetService getService, UserPostService postService) {
+    public UserServiceOrchestrator(UserGetService getService, UserDestructiveService postService) {
         super(getService, postService);
     }
 }
