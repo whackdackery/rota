@@ -12,11 +12,11 @@ import java.util.Optional;
 public abstract class ServiceOrchestrator<E extends BaseEntity, G extends GetDto, P extends PostDto> {
 
     GetService<E, G> getService;
-    PostService<E, P, G> postService;
+    DestructiveService<E, P, G> destructiveService;
 
-    protected ServiceOrchestrator(GetService<E, G> getService, PostService<E, P, G> postService) {
+    protected ServiceOrchestrator(GetService<E, G> getService, DestructiveService<E, P, G> destructiveService) {
         this.getService = getService;
-        this.postService = postService;
+        this.destructiveService = destructiveService;
     }
 
     @Transactional
@@ -31,7 +31,7 @@ public abstract class ServiceOrchestrator<E extends BaseEntity, G extends GetDto
 
     @Transactional
     public Optional<G> createOne(P entity) {
-        return postService.add(entity);
+        return destructiveService.add(entity);
     }
 
     public G updateOne(P entity) {
@@ -39,6 +39,6 @@ public abstract class ServiceOrchestrator<E extends BaseEntity, G extends GetDto
     }
 
     public void deleteOne(Long id) {
-
+        destructiveService.delete(id);
     }
 }

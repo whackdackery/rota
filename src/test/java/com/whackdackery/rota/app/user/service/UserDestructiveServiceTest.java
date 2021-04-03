@@ -20,14 +20,14 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-class UserPostServiceTest {
+class UserDestructiveServiceTest {
     @Mock
     UserRepository repo;
     @Spy
     ModelMapper modelMapper;
 
     @InjectMocks
-    UserPostService service;
+    UserDestructiveService service;
 
     @Test
     void returnsResultWhenUserSuccessfullyInserted() {
@@ -45,8 +45,6 @@ class UserPostServiceTest {
                 .thenThrow(DataIntegrityViolationException.class);
 
         service.add(getTestUserOnePostDto());
-        assertThatThrownBy(() -> {
-            service.add(getTestUserOnePostDto());
-        }).isInstanceOf(DataIntegrityViolationException.class);
+        assertThatThrownBy(() -> service.add(getTestUserOnePostDto())).isInstanceOf(DataIntegrityViolationException.class);
     }
 }
