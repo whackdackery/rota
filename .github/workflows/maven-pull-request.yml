@@ -19,4 +19,4 @@ jobs:
         env:
           DATABASE_USERNAME: ${{ secrets.DATABASE_USERNAME }}
           DATABASE_PASSWORD: ${{ secrets.DATABASE_PASSWORD }}
-        run: mvn verify -q
+        run: mvn verify
