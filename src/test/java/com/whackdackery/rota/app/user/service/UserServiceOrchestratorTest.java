@@ -11,6 +11,7 @@ import org.springframework.data.domain.Pageable;
 
 import java.util.Optional;
 
+import static com.whackdackery.rota.app.user.service.UserTestSetups.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
@@ -20,6 +21,8 @@ class UserServiceOrchestratorTest {
 
     @Mock
     UserGetService getService;
+    @Mock
+    UserDestructiveService destructiveService;
     @InjectMocks
     UserServiceOrchestrator orchestrator;
 
@@ -33,17 +36,26 @@ class UserServiceOrchestratorTest {
 
     @Test
     void returnsResultIfUserFound() {
-        when(getService.get(UserTestSetups.TEST_ID_ONE)).thenReturn(Optional.of(UserTestSetups.getTestUserOneGetDto()));
+        when(getService.get(TEST_ID_ONE)).thenReturn(Optional.of(getTestUserOneGetDto()));
 
-        Optional<UserGetDto> user = orchestrator.getOne(UserTestSetups.TEST_ID_ONE);
+        Optional<UserGetDto> user = orchestrator.getOne(TEST_ID_ONE);
         assertThat(user).isPresent();
     }
 
     @Test
     void returnsMultipleResultsIfMultipleUsersFound() {
-        when(getService.getAll(any(Pageable.class))).thenReturn(UserTestSetups.getPageContainingMultipleUserDtos());
+        when(getService.getAll(any(Pageable.class))).thenReturn(getPageContainingMultipleUserDtos());
 
         Page<UserGetDto> userPage = orchestrator.getAll(Pageable.unpaged());
         assertThat(userPage.getTotalElements()).isEqualTo(2L);
+    }
+
+    @Test
+    void returnsUserIfCreatedSuccessfully() {
+        when(destructiveService.add(getTestUserOnePostDto())).thenReturn(Optional.of(getTestUserOneGetDto()));
+
+        Optional<UserGetDto> user = orchestrator.createOne(getTestUserOnePostDto());
+        assertThat(user).isPresent();
+        assertThat(user.get()).isEqualTo(getTestUserOneGetDto());
     }
 }
