@@ -3,7 +3,5 @@
 ### An open-source rota planning project built with java
 
 [![Main branch status](https://github.com/whackdackery/rota/actions/workflows/maven-master-push.yml/badge.svg)](https://github.com/whackdackery/rota/actions/workflows/maven-master-branch.yml)
-[![Jacoco Coverage](https://raw.githubusercontent.com/whackdackery/rota/master/.github/badges/jacoco.svg)](https://raw.githubusercontent.com/whackdackery/rota/master/.github/badges/jacoco.svg)
+[![codecov](https://codecov.io/gh/whackdackery/rota/branch/master/graph/badge.svg?token=6HHZP1B4XX)](https://codecov.io/gh/whackdackery/rota)
 [![Pull request status](https://github.com/whackdackery/rota/actions/workflows/maven-pull-request.yml/badge.svg)](https://github.com/whackdackery/rota/actions/workflows/maven-pull-request.yml)
-
-[Coverage](https://codecov.io/gh/whackdackery/rota)
