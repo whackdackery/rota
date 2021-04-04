@@ -70,14 +70,6 @@ class UserControllerTest {
     }
 
     @Test
-    void postUserHandlesUnsuccessfulRepoSave() {
-        when(orchestrator.createOne(getTestUserOnePostDto())).thenReturn(Optional.empty());
-
-        assertThatThrownBy(() -> controller.create(getTestUserOnePostDto())).isInstanceOf(ResponseStatusException.class)
-                .hasMessageContaining("There was a problem saving this user");
-    }
-
-    @Test
     void deleteUserSuccessfully() {
         assertThatCode(() -> controller.delete(1L)).doesNotThrowAnyException();
     }
