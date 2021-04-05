@@ -14,11 +14,9 @@ public abstract class DestructiveService<E extends BaseEntity, P extends PostDto
     private final ModelMapper modelMapper;
     private final Class<E> entityClass;
     private final Class<G> getDtoClass;
-    private final Class<P> postDtoClass;
 
 
-    protected DestructiveService(Class<E> entityClass, Class<G> getDtoClass, Class<P> postDtoClass, PagingAndSortingRepository<E, Long> repo, ModelMapper modelMapper) {
-        this.postDtoClass = postDtoClass;
+    protected DestructiveService(Class<E> entityClass, Class<G> getDtoClass, PagingAndSortingRepository<E, Long> repo, ModelMapper modelMapper) {
         this.repo = repo;
         this.modelMapper = modelMapper;
         this.entityClass = entityClass;

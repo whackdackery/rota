@@ -11,6 +11,6 @@ import org.springframework.stereotype.Service;
 @Service
 public class UserDestructiveService extends DestructiveService<User, UserPostDto, UserGetDto> {
     protected UserDestructiveService(UserRepository repo, ModelMapper modelMapper) {
-        super(User.class, UserGetDto.class, UserPostDto.class, repo, modelMapper);
+        super(User.class, UserGetDto.class, repo, modelMapper);
     }
 }
