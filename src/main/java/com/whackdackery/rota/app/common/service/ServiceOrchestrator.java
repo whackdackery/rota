@@ -7,6 +7,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityNotFoundException;
 import java.util.Optional;
 
 public abstract class ServiceOrchestrator<E extends BaseEntity, G extends GetDto, P extends PostDto> {
@@ -34,8 +35,13 @@ public abstract class ServiceOrchestrator<E extends BaseEntity, G extends GetDto
         return destructiveService.add(entity);
     }
 
-    public G updateOne(P entity) {
-        return null;
+    @Transactional
+    public Optional<G> updateOne(Long entityId, P entity) {
+        Optional<G> existingEntity = getService.get(entityId);
+        if (existingEntity.isEmpty()) {
+            throw new EntityNotFoundException();
+        }
+        return destructiveService.update(entityId, entity, existingEntity.get());
     }
 
     public void deleteOne(Long id) {

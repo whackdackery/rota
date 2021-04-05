@@ -16,6 +16,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
+import javax.persistence.EntityNotFoundException;
 import javax.validation.Valid;
 import java.util.HashMap;
 import java.util.Map;
@@ -53,6 +54,12 @@ public class UserController {
         return new ResponseEntity<>(createdUser.get(), HttpStatus.CREATED);
     }
 
+    @PutMapping("/{userId}")
+    public ResponseEntity<UserGetDto> update(@PathVariable Long userId, @Valid @RequestBody UserPostDto user) {
+        Optional<UserGetDto> updatedUser = orchestrator.updateOne(userId, user);
+        return new ResponseEntity<>(updatedUser.get(), HttpStatus.OK);
+    }
+
     @DeleteMapping("/{userId}")
     public void delete(@PathVariable Long userId) {
         orchestrator.deleteOne(userId);
@@ -74,16 +81,24 @@ public class UserController {
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(DataIntegrityViolationException.class)
     public Map<String, String> handleSqlViolationExceptions() {
-        Map<String, String> errors = new HashMap<>();
-        errors.put("Error", "Username or email already exists");
-        return errors;
+        return buildErrorMap("Username or email already exists");
     }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(EmptyResultDataAccessException.class)
     public Map<String, String> handleEmptyResultDataAccessExceptions() {
+        return buildErrorMap("User does not exist");
+    }
+
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(EntityNotFoundException.class)
+    public Map<String, String> handleEntityNotFoundExceptions() {
+        return buildErrorMap("User does not exist");
+    }
+
+    private Map<String, String> buildErrorMap(String s) {
         Map<String, String> errors = new HashMap<>();
-        errors.put("Error", "User does not exist");
+        errors.put("Error", s);
         return errors;
     }
 }
