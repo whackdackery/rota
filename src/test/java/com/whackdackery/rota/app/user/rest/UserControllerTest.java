@@ -70,6 +70,24 @@ class UserControllerTest {
     }
 
     @Test
+    void putUserReturnsSingleResult() {
+        when(orchestrator.updateOne(TEST_ID_ONE, getTestUserOnePostDto())).thenReturn(Optional.of(getTestUserOneGetDto()));
+
+        ResponseEntity<UserGetDto> user = controller.update(TEST_ID_ONE, getTestUserOnePostDto());
+        assertThat(user.getBody()).isEqualTo(getTestUserOneGetDto());
+    }
+
+    @Test
+    void putUserUpdatesExistingUser() {
+        UserGetDto updatedUser = getTestUserOneGetDto();
+        updatedUser.setUsername("UPDATED");
+        when(orchestrator.updateOne(any(), any())).thenReturn(Optional.of(updatedUser));
+
+        ResponseEntity<UserGetDto> user = controller.update(TEST_ID_ONE, getTestUserOnePostDto());
+        assertThat(user.getBody()).isEqualTo(updatedUser);
+    }
+
+    @Test
     void deleteUserSuccessfully() {
         assertThatCode(() -> controller.delete(1L)).doesNotThrowAnyException();
     }

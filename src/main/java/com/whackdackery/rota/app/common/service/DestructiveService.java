@@ -31,6 +31,19 @@ public abstract class DestructiveService<E extends BaseEntity, P extends PostDto
         return Optional.of(convertToGetDto(entity));
     }
 
+    public Optional<G> update(Long entityId, P entity, G existingEntity) {
+        E newEntity = convertToEntity(entity);
+        newEntity.setId(entityId);
+        newEntity.setCreated(existingEntity.getCreated());
+        newEntity.setUpdated(Instant.now());
+        E savedEntity = repo.save(newEntity);
+        return Optional.of(convertToGetDto(savedEntity));
+    }
+
+    public void delete(Long id) {
+        repo.deleteById(id);
+    }
+
     private E convertToEntity(P entityPostDto) {
         return modelMapper.map(entityPostDto, entityClass);
     }
@@ -39,7 +52,4 @@ public abstract class DestructiveService<E extends BaseEntity, P extends PostDto
         return modelMapper.map(entity, getDtoClass);
     }
 
-    public void delete(Long id) {
-        repo.deleteById(id);
-    }
 }
