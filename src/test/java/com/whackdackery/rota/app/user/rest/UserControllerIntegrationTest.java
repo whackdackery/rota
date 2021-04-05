@@ -18,11 +18,12 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 
+import javax.persistence.EntityNotFoundException;
+
 import static com.whackdackery.rota.app.user.service.UserTestSetups.getTestUserOnePostDto;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.doThrow;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 
 @ExtendWith(SpringExtension.class)
 @WebMvcTest
@@ -83,6 +84,15 @@ class UserControllerIntegrationTest {
         assertThat(response.getContentAsString()).contains("Username or email already exists");
     }
 
+    @Test
+    void putUserIsUnsuccessful() throws Exception {
+        doThrow(EntityNotFoundException.class).when(orchestrator).updateOne(1L, getTestUserOnePostDto());
+
+        MockHttpServletResponse response = mockedPutResponse(1L, getTestUserOnePostDto());
+        assertThat(response.getStatus()).isEqualTo(HttpStatus.BAD_REQUEST.value());
+        assertThat(response.getContentAsString()).contains("User does not exist");
+    }
+
 
     @Test
     void deleteUserIsUnsuccessful() throws Exception {
@@ -95,6 +105,15 @@ class UserControllerIntegrationTest {
     private MockHttpServletResponse mockedPostResponse(UserPostDto userPostDto) throws Exception {
         MvcResult res = mockMvc.perform(
                 post("/users")
+                        .content(mapper.writeValueAsString(userPostDto))
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andReturn();
+        return res.getResponse();
+    }
+
+    private MockHttpServletResponse mockedPutResponse(Long userId, UserPostDto userPostDto) throws Exception {
+        MvcResult res = mockMvc.perform(
+                put(String.format("/users/%d", userId))
                         .content(mapper.writeValueAsString(userPostDto))
                         .contentType(MediaType.APPLICATION_JSON))
                 .andReturn();

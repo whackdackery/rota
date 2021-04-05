@@ -58,4 +58,14 @@ class UserServiceOrchestratorTest {
         assertThat(user).isPresent();
         assertThat(user.get()).isEqualTo(getTestUserOneGetDto());
     }
+
+    @Test
+    void returnsUserIfUpdatedSuccessfully() {
+        when(getService.get(any())).thenReturn(Optional.of(getTestUserOneGetDto()));
+        when(destructiveService.update(any(), getTestUserOnePostDto(), getTestUserOneGetDto())).thenReturn(Optional.of(getTestUserOneGetDto()));
+
+        Optional<UserGetDto> user = orchestrator.updateOne(1L, getTestUserOnePostDto());
+        assertThat(user).isPresent();
+        assertThat(user.get()).isEqualTo(getTestUserOneGetDto());
+    }
 }
