@@ -9,10 +9,12 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
+import javax.persistence.EntityNotFoundException;
 import java.util.Optional;
 
 import static com.whackdackery.rota.app.user.service.UserTestSetups.*;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
@@ -67,5 +69,12 @@ class UserServiceOrchestratorTest {
         Optional<UserGetDto> user = orchestrator.updateOne(1L, getTestUserOnePostDto());
         assertThat(user).isPresent();
         assertThat(user.get()).isEqualTo(getTestUserOneGetDto());
+    }
+
+    @Test
+    void returnsErrorDuringUpdateIfUserDoesNotExist() {
+        when(getService.get(any())).thenReturn(Optional.empty());
+
+        assertThatThrownBy(() -> orchestrator.updateOne(1L, getTestUserOnePostDto())).isInstanceOf(EntityNotFoundException.class);
     }
 }
