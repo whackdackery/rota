@@ -3,7 +3,6 @@ on:
   push:
     branches: [ master ]
 
-
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -20,6 +19,18 @@ jobs:
           DATABASE_USERNAME: ${{ secrets.DATABASE_USERNAME }}
           DATABASE_PASSWORD: ${{ secrets.DATABASE_PASSWORD }}
         run: mvn verify
+
+      - name: unit test coverage artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: unit-test-coverage
+          path: ./target/site/jacoco-unit-test-coverage-report
+
+      - name: integration test coverage artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: integration-test-coverage
+          path: ./target/site/jacoco-integration-test-coverage-report
 
       - name: Upload to Codecov
         uses: codecov/codecov-action@v1.2.2
