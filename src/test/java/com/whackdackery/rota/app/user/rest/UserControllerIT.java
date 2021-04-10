@@ -28,7 +28,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 @ExtendWith(SpringExtension.class)
 @WebMvcTest
 @AutoConfigureMockMvc
-class UserControllerIntegrationTest {
+class UserControllerIT {
 
     @Autowired
     ObjectMapper mapper;
