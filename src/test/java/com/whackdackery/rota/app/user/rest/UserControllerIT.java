@@ -47,6 +47,7 @@ class UserControllerIT {
                 .build();
 
         MockHttpServletResponse response = mockedPostResponse(userWithMissingUsername);
+
         assertThat(response.getStatus()).isEqualTo(HttpStatus.BAD_REQUEST.value());
         assertThat(response.getContentAsString()).contains("Username cannot be blank");
     }
@@ -59,6 +60,7 @@ class UserControllerIT {
                 .build();
 
         MockHttpServletResponse response = mockedPostResponse(userWithMissingEmail);
+
         assertThat(response.getStatus()).isEqualTo(HttpStatus.BAD_REQUEST.value());
         assertThat(response.getContentAsString()).contains("Please provide a valid email address");
     }
@@ -72,6 +74,7 @@ class UserControllerIT {
                 .build();
 
         MockHttpServletResponse response = mockedPostResponse(userWithMissingEmail);
+
         assertThat(response.getStatus()).isEqualTo(HttpStatus.BAD_REQUEST.value());
         assertThat(response.getContentAsString()).contains("Please provide a valid email address");
     }
@@ -79,7 +82,9 @@ class UserControllerIT {
     @Test
     void postUserFailsWhenUserAlreadyExists() throws Exception {
         doThrow(DataIntegrityViolationException.class).when(orchestrator).createOne(getTestUserOnePostDto());
+
         MockHttpServletResponse response = mockedPostResponse(getTestUserOnePostDto());
+
         assertThat(response.getStatus()).isEqualTo(HttpStatus.BAD_REQUEST.value());
         assertThat(response.getContentAsString()).contains("Username or email already exists");
     }
@@ -89,6 +94,7 @@ class UserControllerIT {
         doThrow(EntityNotFoundException.class).when(orchestrator).updateOne(1L, getTestUserOnePostDto());
 
         MockHttpServletResponse response = mockedPutResponse(1L, getTestUserOnePostDto());
+
         assertThat(response.getStatus()).isEqualTo(HttpStatus.BAD_REQUEST.value());
         assertThat(response.getContentAsString()).contains("User does not exist");
     }
@@ -97,7 +103,9 @@ class UserControllerIT {
     @Test
     void deleteUserIsUnsuccessful() throws Exception {
         doThrow(EmptyResultDataAccessException.class).when(orchestrator).deleteOne(1L);
+
         MockHttpServletResponse response = mockedDeleteResponse(1L);
+
         assertThat(response.getStatus()).isEqualTo(HttpStatus.BAD_REQUEST.value());
         assertThat(response.getContentAsString()).contains("User does not exist");
     }
