@@ -10,7 +10,6 @@ import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.modelmapper.ModelMapper;
 import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.dao.EmptyResultDataAccessException;
 
 import javax.persistence.EntityNotFoundException;
 import java.util.Optional;
@@ -19,7 +18,6 @@ import static com.whackdackery.rota.app.user.UserTestSetups.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -70,11 +68,4 @@ class UserDestructiveServiceTest {
         assertThatThrownBy(() -> service.update(1L, superAdminUserOnePostDto(), superAdminUserOneGetDto())).isInstanceOf(EntityNotFoundException.class);
     }
 
-    @Test
-    void returnsErrorWhenUserDoesNotExistDuringUserDelete() {
-        doThrow(EmptyResultDataAccessException.class).when(repo).delete(any());
-
-        service.delete(1L);
-        assertThatThrownBy(() -> service.delete(1L)).isInstanceOf(EntityNotFoundException.class);
-    }
 }
