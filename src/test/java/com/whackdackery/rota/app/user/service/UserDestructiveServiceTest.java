@@ -10,6 +10,7 @@ import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.modelmapper.ModelMapper;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.dao.EmptyResultDataAccessException;
 
 import javax.persistence.EntityNotFoundException;
 import java.util.Optional;
@@ -71,7 +72,7 @@ class UserDestructiveServiceTest {
 
     @Test
     void returnsErrorWhenUserDoesNotExistDuringUserDelete() {
-        doThrow(EntityNotFoundException.class).when(repo).delete(any());
+        doThrow(EmptyResultDataAccessException.class).when(repo).delete(any());
 
         service.delete(1L);
         assertThatThrownBy(() -> service.delete(1L)).isInstanceOf(EntityNotFoundException.class);
