@@ -15,7 +15,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.util.Optional;
 
-import static com.whackdackery.rota.app.user.service.UserTestSetups.*;
+import static com.whackdackery.rota.app.user.UserTestSetups.*;
 import static org.assertj.core.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doThrow;
@@ -31,17 +31,17 @@ class UserControllerTest {
 
     @Test
     void getUserReturnsSingleResult() {
-        when(orchestrator.getOne(TEST_ID_ONE)).thenReturn(Optional.of(getTestUserOneGetDto()));
+        when(orchestrator.getOne(SUPER_ADMIN_USER_ID)).thenReturn(Optional.of(superAdminUserOneGetDto()));
 
-        ResponseEntity<UserGetDto> user = controller.getUser(TEST_ID_ONE);
-        assertThat(user.getBody()).isEqualTo(getTestUserOneGetDto());
+        ResponseEntity<UserGetDto> user = controller.getUser(SUPER_ADMIN_USER_ID);
+        assertThat(user.getBody()).isEqualTo(superAdminUserOneGetDto());
     }
 
     @Test
     void getUserReturnsThrowsNotFoundException() {
         when(orchestrator.getOne(any())).thenReturn(Optional.empty());
 
-        assertThatThrownBy(() -> controller.getUser(TEST_ID_ONE)).isInstanceOf(ResponseStatusException.class)
+        assertThatThrownBy(() -> controller.getUser(SUPER_ADMIN_USER_ID)).isInstanceOf(ResponseStatusException.class)
                 .hasMessageContaining("Not found");
     }
 
@@ -63,27 +63,27 @@ class UserControllerTest {
 
     @Test
     void postUserReturnsSuccessfulResult() {
-        when(orchestrator.createOne(getTestUserOnePostDto())).thenReturn(Optional.of(getTestUserOneGetDto()));
+        when(orchestrator.createOne(superAdminUserOnePostDto())).thenReturn(Optional.of(superAdminUserOneGetDto()));
 
-        ResponseEntity<UserGetDto> userGetDtoResponseEntity = controller.create(getTestUserOnePostDto());
-        assertThat(userGetDtoResponseEntity.getBody()).isEqualTo(getTestUserOneGetDto());
+        ResponseEntity<UserGetDto> userGetDtoResponseEntity = controller.create(superAdminUserOnePostDto());
+        assertThat(userGetDtoResponseEntity.getBody()).isEqualTo(superAdminUserOneGetDto());
     }
 
     @Test
     void putUserReturnsSingleResult() {
-        when(orchestrator.updateOne(TEST_ID_ONE, getTestUserOnePostDto())).thenReturn(Optional.of(getTestUserOneGetDto()));
+        when(orchestrator.updateOne(SUPER_ADMIN_USER_ID, superAdminUserOnePostDto())).thenReturn(Optional.of(superAdminUserOneGetDto()));
 
-        ResponseEntity<UserGetDto> user = controller.update(TEST_ID_ONE, getTestUserOnePostDto());
-        assertThat(user.getBody()).isEqualTo(getTestUserOneGetDto());
+        ResponseEntity<UserGetDto> user = controller.update(SUPER_ADMIN_USER_ID, superAdminUserOnePostDto());
+        assertThat(user.getBody()).isEqualTo(superAdminUserOneGetDto());
     }
 
     @Test
     void putUserUpdatesExistingUser() {
-        UserGetDto updatedUser = getTestUserOneGetDto();
+        UserGetDto updatedUser = superAdminUserOneGetDto();
         updatedUser.setUsername("UPDATED");
         when(orchestrator.updateOne(any(), any())).thenReturn(Optional.of(updatedUser));
 
-        ResponseEntity<UserGetDto> user = controller.update(TEST_ID_ONE, getTestUserOnePostDto());
+        ResponseEntity<UserGetDto> user = controller.update(SUPER_ADMIN_USER_ID, superAdminUserOnePostDto());
         assertThat(user.getBody()).isEqualTo(updatedUser);
     }
 

@@ -12,7 +12,7 @@ import org.springframework.data.domain.Pageable;
 import javax.persistence.EntityNotFoundException;
 import java.util.Optional;
 
-import static com.whackdackery.rota.app.user.service.UserTestSetups.*;
+import static com.whackdackery.rota.app.user.UserTestSetups.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
@@ -38,9 +38,9 @@ class UserServiceOrchestratorTest {
 
     @Test
     void returnsResultIfUserFound() {
-        when(getService.get(TEST_ID_ONE)).thenReturn(Optional.of(getTestUserOneGetDto()));
+        when(getService.get(SUPER_ADMIN_USER_ID)).thenReturn(Optional.of(superAdminUserOneGetDto()));
 
-        Optional<UserGetDto> user = orchestrator.getOne(TEST_ID_ONE);
+        Optional<UserGetDto> user = orchestrator.getOne(SUPER_ADMIN_USER_ID);
         assertThat(user).isPresent();
     }
 
@@ -54,27 +54,27 @@ class UserServiceOrchestratorTest {
 
     @Test
     void returnsUserIfCreatedSuccessfully() {
-        when(destructiveService.add(getTestUserOnePostDto())).thenReturn(Optional.of(getTestUserOneGetDto()));
+        when(destructiveService.add(superAdminUserOnePostDto())).thenReturn(Optional.of(superAdminUserOneGetDto()));
 
-        Optional<UserGetDto> user = orchestrator.createOne(getTestUserOnePostDto());
+        Optional<UserGetDto> user = orchestrator.createOne(superAdminUserOnePostDto());
         assertThat(user).isPresent();
-        assertThat(user.get()).isEqualTo(getTestUserOneGetDto());
+        assertThat(user.get()).isEqualTo(superAdminUserOneGetDto());
     }
 
     @Test
     void returnsUserIfUpdatedSuccessfully() {
-        when(getService.get(any())).thenReturn(Optional.of(getTestUserOneGetDto()));
-        when(destructiveService.update(1L, getTestUserOnePostDto(), getTestUserOneGetDto())).thenReturn(Optional.of(getTestUserOneGetDto()));
+        when(getService.get(any())).thenReturn(Optional.of(superAdminUserOneGetDto()));
+        when(destructiveService.update(1L, superAdminUserOnePostDto(), superAdminUserOneGetDto())).thenReturn(Optional.of(superAdminUserOneGetDto()));
 
-        Optional<UserGetDto> user = orchestrator.updateOne(1L, getTestUserOnePostDto());
+        Optional<UserGetDto> user = orchestrator.updateOne(1L, superAdminUserOnePostDto());
         assertThat(user).isPresent();
-        assertThat(user.get()).isEqualTo(getTestUserOneGetDto());
+        assertThat(user.get()).isEqualTo(superAdminUserOneGetDto());
     }
 
     @Test
     void returnsErrorDuringUpdateIfUserDoesNotExist() {
         when(getService.get(any())).thenReturn(Optional.empty());
 
-        assertThatThrownBy(() -> orchestrator.updateOne(1L, getTestUserOnePostDto())).isInstanceOf(EntityNotFoundException.class);
+        assertThatThrownBy(() -> orchestrator.updateOne(1L, superAdminUserOnePostDto())).isInstanceOf(EntityNotFoundException.class);
     }
 }

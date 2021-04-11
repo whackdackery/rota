@@ -14,6 +14,7 @@ import javax.persistence.Table;
 @Data
 public class SystemRole extends BaseEntity {
     public enum RoleType {
+        SUPER_ADMIN("SUPER_ADMIN"),
         ADMIN("ADMIN"),
         EDITOR("EDITOR"),
         SCHEDULER("SCHEDULER"),

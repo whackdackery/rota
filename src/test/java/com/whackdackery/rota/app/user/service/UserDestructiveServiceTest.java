@@ -14,10 +14,11 @@ import org.springframework.dao.DataIntegrityViolationException;
 import javax.persistence.EntityNotFoundException;
 import java.util.Optional;
 
-import static com.whackdackery.rota.app.user.service.UserTestSetups.*;
+import static com.whackdackery.rota.app.user.UserTestSetups.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -33,38 +34,46 @@ class UserDestructiveServiceTest {
     @Test
     void returnsResultWhenUserSuccessfullyInserted() {
         when(repo.save(any()))
-                .thenReturn(getTestUserOne());
+                .thenReturn(superAdminUserIdOne());
 
-        Optional<UserGetDto> createdUser = service.add(getTestUserOnePostDto());
-        assertThat(createdUser).contains(getTestUserOneGetDto());
+        Optional<UserGetDto> createdUser = service.add(superAdminUserOnePostDto());
+        assertThat(createdUser).contains(superAdminUserOneGetDto());
     }
 
     @Test
-    void returnsErrorWhenUserAlreadyExists() {
+    void returnsErrorWhenUserAlreadyExistsDuringUserPost() {
         when(repo.save(any()))
-                .thenReturn(getTestUserOne())
+                .thenReturn(superAdminUserIdOne())
                 .thenThrow(DataIntegrityViolationException.class);
 
-        service.add(getTestUserOnePostDto());
-        assertThatThrownBy(() -> service.add(getTestUserOnePostDto())).isInstanceOf(DataIntegrityViolationException.class);
+        service.add(superAdminUserOnePostDto());
+        assertThatThrownBy(() -> service.add(superAdminUserOnePostDto())).isInstanceOf(DataIntegrityViolationException.class);
     }
 
     @Test
-    void returnsResultWhenUserSuccessfullyUpdated() {
+    void returnsResultWhenUserSuccessfullyUpdatedDuringUserPut() {
         when(repo.save(any()))
-                .thenReturn(getTestUserOne());
+                .thenReturn(superAdminUserIdOne());
 
-        Optional<UserGetDto> updatedUser = service.update(1L, getTestUserOnePostDto(), getTestUserOneGetDto());
-        assertThat(updatedUser).contains(getTestUserOneGetDto());
+        Optional<UserGetDto> updatedUser = service.update(1L, superAdminUserOnePostDto(), superAdminUserOneGetDto());
+        assertThat(updatedUser).contains(superAdminUserOneGetDto());
     }
 
     @Test
-    void returnsErrorWhenUserDoesNotExist() {
+    void returnsErrorWhenUserDoesNotExistDuringUserPut() {
         when(repo.save(any()))
-                .thenReturn(getTestUserOne())
+                .thenReturn(superAdminUserIdOne())
                 .thenThrow(EntityNotFoundException.class);
 
-        service.update(1L, getTestUserOnePostDto(), getTestUserOneGetDto());
-        assertThatThrownBy(() -> service.update(1L, getTestUserOnePostDto(), getTestUserOneGetDto())).isInstanceOf(EntityNotFoundException.class);
+        service.update(1L, superAdminUserOnePostDto(), superAdminUserOneGetDto());
+        assertThatThrownBy(() -> service.update(1L, superAdminUserOnePostDto(), superAdminUserOneGetDto())).isInstanceOf(EntityNotFoundException.class);
+    }
+
+    @Test
+    void returnsErrorWhenUserDoesNotExistDuringUserDelete() {
+        doThrow(EntityNotFoundException.class).when(repo).delete(any());
+
+        service.delete(1L);
+        assertThatThrownBy(() -> service.delete(1L)).isInstanceOf(EntityNotFoundException.class);
     }
 }

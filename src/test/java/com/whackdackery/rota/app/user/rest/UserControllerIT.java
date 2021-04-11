@@ -20,7 +20,7 @@ import org.springframework.test.web.servlet.MvcResult;
 
 import javax.persistence.EntityNotFoundException;
 
-import static com.whackdackery.rota.app.user.service.UserTestSetups.getTestUserOnePostDto;
+import static com.whackdackery.rota.app.user.UserTestSetups.superAdminUserOnePostDto;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.doThrow;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -81,9 +81,9 @@ class UserControllerIT {
 
     @Test
     void postUserFailsWhenUserAlreadyExists() throws Exception {
-        doThrow(DataIntegrityViolationException.class).when(orchestrator).createOne(getTestUserOnePostDto());
+        doThrow(DataIntegrityViolationException.class).when(orchestrator).createOne(superAdminUserOnePostDto());
 
-        MockHttpServletResponse response = mockedPostResponse(getTestUserOnePostDto());
+        MockHttpServletResponse response = mockedPostResponse(superAdminUserOnePostDto());
 
         assertThat(response.getStatus()).isEqualTo(HttpStatus.BAD_REQUEST.value());
         assertThat(response.getContentAsString()).contains("Username or email already exists");
@@ -91,9 +91,9 @@ class UserControllerIT {
 
     @Test
     void putUserIsUnsuccessful() throws Exception {
-        doThrow(EntityNotFoundException.class).when(orchestrator).updateOne(1L, getTestUserOnePostDto());
+        doThrow(EntityNotFoundException.class).when(orchestrator).updateOne(1L, superAdminUserOnePostDto());
 
-        MockHttpServletResponse response = mockedPutResponse(1L, getTestUserOnePostDto());
+        MockHttpServletResponse response = mockedPutResponse(1L, superAdminUserOnePostDto());
 
         assertThat(response.getStatus()).isEqualTo(HttpStatus.BAD_REQUEST.value());
         assertThat(response.getContentAsString()).contains("User does not exist");

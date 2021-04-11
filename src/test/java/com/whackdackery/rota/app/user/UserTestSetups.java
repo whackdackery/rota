@@ -1,5 +1,6 @@
-package com.whackdackery.rota.app.user.service;
+package com.whackdackery.rota.app.user;
 
+import com.whackdackery.rota.app.user.model.SystemRole;
 import com.whackdackery.rota.app.user.model.User;
 import com.whackdackery.rota.app.user.model.dto.UserGetDto;
 import com.whackdackery.rota.app.user.model.dto.UserPostDto;
@@ -8,30 +9,31 @@ import org.springframework.data.domain.PageImpl;
 
 import java.time.Instant;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class UserTestSetups {
 
-    public static final Long TEST_ID_ONE = 1L;
-    public static final Long TEST_ID_TWO = 2L;
-    public static final String TEST_USERNAME_ONE = "Test";
-    public static final String TEST_EMAIL_ONE = "test@admin.com";
-    public static final String TEST_PASSWORD_ONE = "password1";
-    public static final String TEST_USERNAME_TWO = "Test2";
-    public static final String TEST_EMAIL_TWO = "test2@admin.com";
-    public static final String TEST_PASSWORD_TWO = "password2";
+    public static final Long SUPER_ADMIN_USER_ID = 1L;
+    public static final String SUPER_ADMIN_USERNAME = "Test";
+    public static final String SUPER_ADMIN_EMAIL = "test@admin.com";
+    public static final String SUPER_ADMIN_PASSWORD = "password1";
+    public static final Long ADMIN_USER_ID = 2L;
+    public static final String ADMIN_USERNAME = "Test2";
+    public static final String ADMIN_EMAIL = "test2@admin.com";
+    public static final String ADMIN_PASSWORD = "password2";
     public static final Instant CREATED_ON = Instant.parse("2020-01-01T09:00:00.00Z");
     public static final Instant UPDATED_ON = Instant.parse("2020-01-01T09:00:00.00Z");
 
-    public static User getTestUserOne() {
-        return generateUser(TEST_ID_ONE, TEST_USERNAME_ONE, TEST_EMAIL_ONE, TEST_PASSWORD_ONE);
+    public static User superAdminUserIdOne() {
+        return generateUser(SUPER_ADMIN_USER_ID, SUPER_ADMIN_USERNAME, SUPER_ADMIN_EMAIL, SUPER_ADMIN_PASSWORD, SystemRole.RoleType.SUPER_ADMIN);
     }
 
-    public static User getTestUserTwo() {
-        return generateUser(TEST_ID_TWO, TEST_USERNAME_TWO, TEST_EMAIL_TWO, TEST_PASSWORD_TWO);
+    public static User adminUserTwo() {
+        return generateUser(ADMIN_USER_ID, ADMIN_USERNAME, ADMIN_EMAIL, ADMIN_PASSWORD, SystemRole.RoleType.ADMIN);
     }
 
-    private static User generateUser(Long testIdTwo, String testUsernameTwo, String testEmailTwo, String testPasswordTwo) {
+    private static User generateUser(Long testIdTwo, String testUsernameTwo, String testEmailTwo, String testPasswordTwo, SystemRole.RoleType roleType) {
         User user = new User();
         user.setId(testIdTwo);
         user.setUsername(testUsernameTwo);
@@ -39,16 +41,20 @@ public class UserTestSetups {
         user.setPassword(testPasswordTwo);
         user.setCreated(CREATED_ON);
         user.setUpdated(UPDATED_ON);
+        SystemRole systemRole = new SystemRole();
+        systemRole.setRoleType(roleType);
+        systemRole.setName(roleType.name());
+        user.setSystemRoles(Collections.singleton(systemRole));
         return user;
     }
 
-    public static UserGetDto getTestUserOneGetDto() {
-        User user = getTestUserOne();
+    public static UserGetDto superAdminUserOneGetDto() {
+        User user = superAdminUserIdOne();
         return generateGetDto(user);
     }
 
-    public static UserGetDto getTestUserTwoGetDto() {
-        User user = getTestUserTwo();
+    public static UserGetDto adminUserTwoGetDto() {
+        User user = adminUserTwo();
         return generateGetDto(user);
     }
 
@@ -59,37 +65,38 @@ public class UserTestSetups {
         userGetDto.setEmail(user.getEmail());
         userGetDto.setCreated(user.getCreated());
         userGetDto.setUpdated(user.getUpdated());
+        userGetDto.setRoles(user.getSystemRoles());
         return userGetDto;
     }
 
     public static Page<User> getPageContainingSingleUser() {
         List<User> users = new ArrayList<>();
-        users.add(getTestUserOne());
+        users.add(superAdminUserIdOne());
         return new PageImpl<>(users);
     }
 
     public static Page<User> getPageContainingMultipleUsers() {
         List<User> users = new ArrayList<>();
-        users.add(getTestUserOne());
-        users.add(getTestUserTwo());
+        users.add(superAdminUserIdOne());
+        users.add(adminUserTwo());
         return new PageImpl<>(users);
     }
 
     public static Page<UserGetDto> getPageContainingSingleUserDto() {
         List<UserGetDto> users = new ArrayList<>();
-        users.add(getTestUserOneGetDto());
+        users.add(superAdminUserOneGetDto());
         return new PageImpl<>(users);
     }
 
     public static Page<UserGetDto> getPageContainingMultipleUserDtos() {
         List<UserGetDto> users = new ArrayList<>();
-        users.add(getTestUserOneGetDto());
-        users.add(getTestUserTwoGetDto());
+        users.add(superAdminUserOneGetDto());
+        users.add(adminUserTwoGetDto());
         return new PageImpl<>(users);
     }
 
-    public static UserPostDto getTestUserOnePostDto() {
-        User user = getTestUserOne();
+    public static UserPostDto superAdminUserOnePostDto() {
+        User user = superAdminUserIdOne();
         return generatePostDto(user);
     }
 
