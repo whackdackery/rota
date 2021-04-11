@@ -1,5 +1,6 @@
 package com.whackdackery.rota.app.user.service;
 
+import com.whackdackery.rota.app.user.model.SystemRole;
 import com.whackdackery.rota.app.user.model.dto.UserGetDto;
 import com.whackdackery.rota.app.user.repository.UserRepository;
 import org.junit.jupiter.api.Test;
@@ -14,7 +15,7 @@ import org.springframework.data.domain.Pageable;
 
 import java.util.Optional;
 
-import static com.whackdackery.rota.app.user.service.UserTestSetups.*;
+import static com.whackdackery.rota.app.user.UserTestSetups.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
@@ -31,18 +32,19 @@ class UserGetServiceTest {
 
     @Test
     void getReturnsDtoWhenIdIsValid() {
-        when(userRepositoryMock.findById(TEST_ID_ONE)).thenReturn(Optional.of(getTestUserOne()));
+        when(userRepositoryMock.findById(SUPER_ADMIN_USER_ID)).thenReturn(Optional.of(superAdminUserIdOne()));
 
-        Optional<UserGetDto> user = userGetService.get(TEST_ID_ONE);
+        Optional<UserGetDto> user = userGetService.get(SUPER_ADMIN_USER_ID);
         assertThat(user).isPresent();
         assertThat(user.get()).isInstanceOf(UserGetDto.class);
+        assertThat(user.get().getRoles().stream().findFirst().get().getRoleType()).isEqualTo(SystemRole.RoleType.SUPER_ADMIN);
     }
 
     @Test
     void getReturnsDtoWhenIdIsInvalid() {
-        when(userRepositoryMock.findById(TEST_ID_TWO)).thenReturn(Optional.empty());
+        when(userRepositoryMock.findById(ADMIN_USER_ID)).thenReturn(Optional.empty());
 
-        Optional<UserGetDto> user = userGetService.get(TEST_ID_TWO);
+        Optional<UserGetDto> user = userGetService.get(ADMIN_USER_ID);
         assertThat(user).isNotPresent();
     }
 
@@ -54,7 +56,7 @@ class UserGetServiceTest {
         UserGetDto user = users.get().findFirst().get();
         assertThat(users.getTotalElements()).isEqualTo(1L);
         assertThat(users).isInstanceOf(Page.class);
-        assertThat(user).isEqualTo(getTestUserOneGetDto());
+        assertThat(user).isEqualTo(superAdminUserOneGetDto());
     }
 
     @Test

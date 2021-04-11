@@ -87,7 +87,7 @@ public class UserController {
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(EmptyResultDataAccessException.class)
     public Map<String, String> handleEmptyResultDataAccessExceptions() {
-        return buildErrorMap("User does not exist");
+        return buildErrorMap("User does not exist. Nothing deleted");
     }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)

@@ -20,7 +20,7 @@ import org.springframework.test.web.servlet.MvcResult;
 
 import javax.persistence.EntityNotFoundException;
 
-import static com.whackdackery.rota.app.user.service.UserTestSetups.getTestUserOnePostDto;
+import static com.whackdackery.rota.app.user.UserTestSetups.superAdminUserOnePostDto;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.doThrow;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -28,7 +28,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 @ExtendWith(SpringExtension.class)
 @WebMvcTest
 @AutoConfigureMockMvc
-class UserControllerIntegrationTest {
+class UserControllerIT {
 
     @Autowired
     ObjectMapper mapper;
@@ -47,6 +47,7 @@ class UserControllerIntegrationTest {
                 .build();
 
         MockHttpServletResponse response = mockedPostResponse(userWithMissingUsername);
+
         assertThat(response.getStatus()).isEqualTo(HttpStatus.BAD_REQUEST.value());
         assertThat(response.getContentAsString()).contains("Username cannot be blank");
     }
@@ -59,6 +60,7 @@ class UserControllerIntegrationTest {
                 .build();
 
         MockHttpServletResponse response = mockedPostResponse(userWithMissingEmail);
+
         assertThat(response.getStatus()).isEqualTo(HttpStatus.BAD_REQUEST.value());
         assertThat(response.getContentAsString()).contains("Please provide a valid email address");
     }
@@ -72,23 +74,27 @@ class UserControllerIntegrationTest {
                 .build();
 
         MockHttpServletResponse response = mockedPostResponse(userWithMissingEmail);
+
         assertThat(response.getStatus()).isEqualTo(HttpStatus.BAD_REQUEST.value());
         assertThat(response.getContentAsString()).contains("Please provide a valid email address");
     }
 
     @Test
     void postUserFailsWhenUserAlreadyExists() throws Exception {
-        doThrow(DataIntegrityViolationException.class).when(orchestrator).createOne(getTestUserOnePostDto());
-        MockHttpServletResponse response = mockedPostResponse(getTestUserOnePostDto());
+        doThrow(DataIntegrityViolationException.class).when(orchestrator).createOne(superAdminUserOnePostDto());
+
+        MockHttpServletResponse response = mockedPostResponse(superAdminUserOnePostDto());
+
         assertThat(response.getStatus()).isEqualTo(HttpStatus.BAD_REQUEST.value());
         assertThat(response.getContentAsString()).contains("Username or email already exists");
     }
 
     @Test
     void putUserIsUnsuccessful() throws Exception {
-        doThrow(EntityNotFoundException.class).when(orchestrator).updateOne(1L, getTestUserOnePostDto());
+        doThrow(EntityNotFoundException.class).when(orchestrator).updateOne(1L, superAdminUserOnePostDto());
 
-        MockHttpServletResponse response = mockedPutResponse(1L, getTestUserOnePostDto());
+        MockHttpServletResponse response = mockedPutResponse(1L, superAdminUserOnePostDto());
+
         assertThat(response.getStatus()).isEqualTo(HttpStatus.BAD_REQUEST.value());
         assertThat(response.getContentAsString()).contains("User does not exist");
     }
@@ -97,7 +103,9 @@ class UserControllerIntegrationTest {
     @Test
     void deleteUserIsUnsuccessful() throws Exception {
         doThrow(EmptyResultDataAccessException.class).when(orchestrator).deleteOne(1L);
+
         MockHttpServletResponse response = mockedDeleteResponse(1L);
+
         assertThat(response.getStatus()).isEqualTo(HttpStatus.BAD_REQUEST.value());
         assertThat(response.getContentAsString()).contains("User does not exist");
     }

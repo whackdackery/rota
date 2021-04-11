@@ -4,9 +4,8 @@ import com.whackdackery.rota.app.common.model.BaseEntity;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Table;
+import javax.persistence.*;
+import java.util.Set;
 
 @EqualsAndHashCode(callSuper = true)
 @Entity
@@ -19,5 +18,10 @@ public class User extends BaseEntity {
     @Column(unique = true)
     private String email;
     private String password;
+    @ManyToMany
+    @JoinTable(name = "users_to_system_roles",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "system_role_id"))
+    private Set<SystemRole> systemRoles;
 
 }
