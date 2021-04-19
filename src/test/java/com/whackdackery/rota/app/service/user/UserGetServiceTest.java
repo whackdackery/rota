@@ -1,21 +1,23 @@
-package com.whackdackery.rota.app.user.service;
+package com.whackdackery.rota.app.service.user;
 
-import com.whackdackery.rota.app.user.model.SystemRole;
-import com.whackdackery.rota.app.user.model.dto.UserGetDto;
-import com.whackdackery.rota.app.user.repository.UserRepository;
+import com.whackdackery.rota.app.common.model.ModelMapperUtil;
+import com.whackdackery.rota.app.service.user.domain.SystemRole;
+import com.whackdackery.rota.app.service.user.domain.User;
+import com.whackdackery.rota.app.service.user.domain.dto.UserGetDto;
+import com.whackdackery.rota.app.service.user.domain.dto.UserPostDto;
+import com.whackdackery.rota.app.service.user.repository.UserRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 import java.util.Optional;
 
-import static com.whackdackery.rota.app.user.UserTestSetups.*;
+import static com.whackdackery.rota.app.service.user.UserTestSetups.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
@@ -23,16 +25,16 @@ import static org.mockito.Mockito.when;
 @ExtendWith(MockitoExtension.class)
 class UserGetServiceTest {
 
+    @Spy
+    ModelMapperUtil<User, UserGetDto, UserPostDto> modelMapperUtil;
     @Mock
     UserRepository userRepositoryMock;
-    @Spy
-    ModelMapper modelMapper;
     @InjectMocks
     UserGetService userGetService;
 
     @Test
     void getReturnsDtoWhenIdIsValid() {
-        when(userRepositoryMock.findById(SUPER_ADMIN_USER_ID)).thenReturn(Optional.of(superAdminUserIdOne()));
+        when(userRepositoryMock.findById(SUPER_ADMIN_USER_ID)).thenReturn(Optional.of(superAdminUserOne()));
 
         Optional<UserGetDto> user = userGetService.get(SUPER_ADMIN_USER_ID);
         assertThat(user).isPresent();

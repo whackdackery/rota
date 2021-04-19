@@ -1,7 +1,7 @@
-package com.whackdackery.rota.app.user.model.dto;
+package com.whackdackery.rota.app.service.user.domain.dto;
 
 import com.whackdackery.rota.app.common.model.GetDto;
-import com.whackdackery.rota.app.user.model.SystemRole;
+import com.whackdackery.rota.app.service.user.domain.SystemRole;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;

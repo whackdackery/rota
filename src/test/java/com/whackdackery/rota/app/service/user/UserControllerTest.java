@@ -1,7 +1,6 @@
-package com.whackdackery.rota.app.user.rest;
+package com.whackdackery.rota.app.service.user;
 
-import com.whackdackery.rota.app.user.model.dto.UserGetDto;
-import com.whackdackery.rota.app.user.service.UserServiceOrchestrator;
+import com.whackdackery.rota.app.service.user.domain.dto.UserGetDto;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -15,7 +14,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.util.Optional;
 
-import static com.whackdackery.rota.app.user.UserTestSetups.*;
+import static com.whackdackery.rota.app.service.user.UserTestSetups.*;
 import static org.assertj.core.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doThrow;
