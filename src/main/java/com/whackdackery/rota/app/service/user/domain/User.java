@@ -1,4 +1,4 @@
-package com.whackdackery.rota.app.user.model;
+package com.whackdackery.rota.app.service.user.domain;
 
 import com.whackdackery.rota.app.common.model.BaseEntity;
 import lombok.Data;

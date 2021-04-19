@@ -1,8 +1,7 @@
-package com.whackdackery.rota.app.user.rest;
+package com.whackdackery.rota.app.service.user;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.whackdackery.rota.app.user.model.dto.UserPostDto;
-import com.whackdackery.rota.app.user.service.UserServiceOrchestrator;
+import com.whackdackery.rota.app.service.user.domain.dto.UserPostDto;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +19,7 @@ import org.springframework.test.web.servlet.MvcResult;
 
 import javax.persistence.EntityNotFoundException;
 
-import static com.whackdackery.rota.app.user.UserTestSetups.superAdminUserOnePostDto;
+import static com.whackdackery.rota.app.service.user.UserTestSetups.superAdminUserOnePostDto;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.doThrow;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;

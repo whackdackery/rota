@@ -1,9 +1,9 @@
-package com.whackdackery.rota.app.user;
+package com.whackdackery.rota.app.service.user;
 
-import com.whackdackery.rota.app.user.model.SystemRole;
-import com.whackdackery.rota.app.user.model.User;
-import com.whackdackery.rota.app.user.model.dto.UserGetDto;
-import com.whackdackery.rota.app.user.model.dto.UserPostDto;
+import com.whackdackery.rota.app.service.user.domain.SystemRole;
+import com.whackdackery.rota.app.service.user.domain.User;
+import com.whackdackery.rota.app.service.user.domain.dto.UserGetDto;
+import com.whackdackery.rota.app.service.user.domain.dto.UserPostDto;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 
@@ -25,7 +25,7 @@ public class UserTestSetups {
     public static final Instant CREATED_ON = Instant.parse("2020-01-01T09:00:00.00Z");
     public static final Instant UPDATED_ON = Instant.parse("2020-01-01T09:00:00.00Z");
 
-    public static User superAdminUserIdOne() {
+    public static User superAdminUserOne() {
         return generateUser(SUPER_ADMIN_USER_ID, SUPER_ADMIN_USERNAME, SUPER_ADMIN_EMAIL, SUPER_ADMIN_PASSWORD, SystemRole.RoleType.SUPER_ADMIN);
     }
 
@@ -49,7 +49,7 @@ public class UserTestSetups {
     }
 
     public static UserGetDto superAdminUserOneGetDto() {
-        User user = superAdminUserIdOne();
+        User user = superAdminUserOne();
         return generateGetDto(user);
     }
 
@@ -71,13 +71,13 @@ public class UserTestSetups {
 
     public static Page<User> getPageContainingSingleUser() {
         List<User> users = new ArrayList<>();
-        users.add(superAdminUserIdOne());
+        users.add(superAdminUserOne());
         return new PageImpl<>(users);
     }
 
     public static Page<User> getPageContainingMultipleUsers() {
         List<User> users = new ArrayList<>();
-        users.add(superAdminUserIdOne());
+        users.add(superAdminUserOne());
         users.add(adminUserTwo());
         return new PageImpl<>(users);
     }
@@ -96,7 +96,7 @@ public class UserTestSetups {
     }
 
     public static UserPostDto superAdminUserOnePostDto() {
-        User user = superAdminUserIdOne();
+        User user = superAdminUserOne();
         return generatePostDto(user);
     }
 

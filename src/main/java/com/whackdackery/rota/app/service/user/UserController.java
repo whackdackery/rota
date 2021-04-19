@@ -1,8 +1,7 @@
-package com.whackdackery.rota.app.user.rest;
+package com.whackdackery.rota.app.service.user;
 
-import com.whackdackery.rota.app.user.model.dto.UserGetDto;
-import com.whackdackery.rota.app.user.model.dto.UserPostDto;
-import com.whackdackery.rota.app.user.service.UserServiceOrchestrator;
+import com.whackdackery.rota.app.service.user.domain.dto.UserGetDto;
+import com.whackdackery.rota.app.service.user.domain.dto.UserPostDto;
 import lombok.AllArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -63,6 +62,11 @@ public class UserController {
     @DeleteMapping("/{userId}")
     public void delete(@PathVariable Long userId) {
         orchestrator.deleteOne(userId);
+    }
+
+    @PostMapping("/{userId}/role/{roleId}")
+    public void addRoleForUser(@PathVariable Long userId, @PathVariable Long roleId) {
+//        orchestrator.addRoleForUser(userId, roleId);
     }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)

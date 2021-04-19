@@ -1,4 +1,4 @@
-package com.whackdackery.rota.app.user.model.dto;
+package com.whackdackery.rota.app.service.user.domain.dto;
 
 import com.whackdackery.rota.app.common.model.PostDto;
 import lombok.Builder;
